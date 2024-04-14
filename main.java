@@ -1,3 +1,5 @@
+package comp3005project;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -593,13 +595,14 @@ public class main {
 	                            billing.executeUpdate();
 	                            
 	                            // add entry into TrainerSchedule
-	                            String trainerScheduleQuery = "INSERT INTO TrainerSchedule (session_day, session_time, trainerID, memberID, member_name) VALUES (?, ?, ?, ?, ?)";
+	                            String trainerScheduleQuery = "INSERT INTO TrainerSchedule (sessionID, session_day, session_time, trainerID, memberID, member_name) VALUES (?, ?, ?, ?, ?, ?)";
 	                            PreparedStatement trainerScheduleStatement = con.prepareStatement(trainerScheduleQuery);
-	                            trainerScheduleStatement.setDate(1, (java.sql.Date) sessionDay);
-	                            trainerScheduleStatement.setTime(2, sessionTime);
-	                            trainerScheduleStatement.setInt(3, trainerID);
-	                            trainerScheduleStatement.setInt(4, getMemberID(con, username));
-	                            trainerScheduleStatement.setString(5, getMemberName(con, username));
+	                            trainerScheduleStatement.setInt(1, sessionID);
+	                            trainerScheduleStatement.setDate(2, (java.sql.Date) sessionDay);
+	                            trainerScheduleStatement.setTime(3, sessionTime);
+	                            trainerScheduleStatement.setInt(4, trainerID);
+	                            trainerScheduleStatement.setInt(5, getMemberID(con, username));
+	                            trainerScheduleStatement.setString(6, getMemberName(con, username));
 	                            trainerScheduleStatement.executeUpdate();
 	                            
 	                            //pay trainer
@@ -649,17 +652,18 @@ public class main {
 		                        deleteBilling.setString(2, "training session");
 		                        deleteBilling.setInt(3, removeTraining);
 		                        
+		                        //remove trainer payment
+		                        String deleteTrainerPaymentQuery = "DELETE FROM TrainerPayment WHERE sessionID = ?";
+		                        PreparedStatement deleteTrainerPaymentStatement = con.prepareStatement(deleteTrainerPaymentQuery);
+		                        deleteTrainerPaymentStatement.setInt(1, removeTraining);
+		                        deleteTrainerPaymentStatement.executeUpdate();
+		                        
 		                        // remove entry from TrainerSchedule
 		                        String deleteTrainerScheduleQuery = "DELETE FROM TrainerSchedule WHERE sessionID = ?";
 		                        PreparedStatement deleteTrainerScheduleStatement = con.prepareStatement(deleteTrainerScheduleQuery);
 		                        deleteTrainerScheduleStatement.setInt(1, removeTraining);
 		                        deleteTrainerScheduleStatement.executeUpdate();
 		                        
-		                        //remove trainer payment
-		                        String deleteTrainerPaymentQuery = "DELETE FROM TrainerPayment WHERE sessionID = ?";
-		                        PreparedStatement deleteTrainerPaymentStatement = con.prepareStatement(deleteTrainerPaymentQuery);
-		                        deleteTrainerPaymentStatement.setInt(1, removeTraining);
-		                        deleteTrainerPaymentStatement.executeUpdate();
 		                        
 		                        System.out.println("Session canceled.");
 		                        
@@ -1226,7 +1230,7 @@ public class main {
 
     public static void main(String[] args) throws ParseException {
         // JDBC & Database credentials
-        String url = "jdbc:postgresql://localhost:5432/proj";
+        String url = "jdbc:postgresql://localhost:5432/test2";
         String user = "postgres";  
         String password = "postgres";  
          
