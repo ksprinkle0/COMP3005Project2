@@ -16,10 +16,6 @@ import java.util.Scanner;
 
 public class main {
 	
-	/*
-	 * https://docs.oracle.com/javase/tutorial/jdbc/basics/prepared.html
-	 */
-	
 	////////////////////////////////////////////////////////
 	// Ask the user to register or login as a member	  //
 	// trainer, or administrative staff                   //
